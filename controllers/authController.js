@@ -36,7 +36,7 @@ exports.signup = catchAsync(async (req,res,next) => {
     const newUser = await User.create(req.body);
     
     const url = `${req.protocol}://${req.get('host')}/me`;
-    console.log(url);
+    // console.log(url);
     await new Email(newUser, url).sendWelcome();
     
     createSendToken(newUser, 201, res);
@@ -75,14 +75,14 @@ exports.protect = catchAsync(async(req, res, next) => {
     } else if (req.cookies.jwt) {
       token = req.cookies.jwt
     }
-    console.log(token);
+    // console.log(token);
 
     if(!token) {
         return next(new AppError('You are not logged in! Please log in to get access.',401))
     }
     //2) Verification token
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    console.log(decoded);
+    // console.log(decoded);
     // 3) Check if user still exists
     const currentUser = await User.findById(decoded.id);
     if (!currentUser) {
